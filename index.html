@@ -111,7 +111,8 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 .grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(262px,1fr));gap:clamp(18px,2.4vw,28px)}
 .bc[hidden],.lc[hidden]{display:none}
 .ph{aspect-ratio:16/11;overflow:hidden;background:#E8F2F7;position:relative}
-.ph img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.ph img,.ph video{width:100%;height:100%;object-fit:cover;transition:transform .5s;display:block}
+.bc:hover .ph video{transform:scale(1.03)}
 .bc:hover .ph img,.lc:hover .ph img{transform:scale(1.04)}
 .ph.none{display:grid;place-items:center;font-family:var(--m);font-size:11px;
   letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
@@ -295,7 +296,16 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
           <p class="bh">1 Bedroom &middot; 1 Bath</p>
           <p class="rent">$1,600<small>/mo</small></p>
           <p class="avail">Available September 1</p>
-          <a class="pill" href="https://arcadiapropertygroup.managebuilding.com/Resident/rental-application/new" target="_blank" rel="noopener">Apply</a></div></article></div>
+          <a class="pill" href="https://arcadiapropertygroup.managebuilding.com/Resident/rental-application/new" target="_blank" rel="noopener">Apply</a></div></article>
+        <article class="bc" data-hood="Lakeview">
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/cornelia.jpg"><source src="media/cornelia.mp4" type="video/mp4"></video></div>
+          <p class="addr">&nbsp;</p><h3>Cornelia</h3><p class="bh">Lakeview</p></article>
+        <article class="bc" data-hood="Ukrainian Village">
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/damen.jpg"><source src="media/damen.mp4" type="video/mp4"></video></div>
+          <p class="addr">&nbsp;</p><h3>Damen</h3><p class="bh">Ukrainian Village</p></article>
+        <article class="bc" data-hood="Lakeview">
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/newport.jpg"><source src="media/newport.mp4" type="video/mp4"></video></div>
+          <p class="addr">&nbsp;</p><h3>Newport</h3><p class="bh">Lakeview</p></article></div>
       <div class="note"><h4>Live listings, pulled 8 Sep</h4>
         <ul><li>Rents and unit numbers come from Arcadia's own application page. Two still need photographs.</li></ul></div>
     </div>
@@ -322,40 +332,40 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
           <button class="chip" data-f="Uptown">Uptown</button>
           <button class="chip" data-f="West Ridge">West Ridge</button></div>
       <div class="grid2" id="bgrid"><article class="bc" data-hood="Humboldt Park">
-          <div class="ph"><img src="images/img02.jpg" alt="Talman"></div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/talman.jpg"><source src="media/talman.mp4" type="video/mp4"></video></div>
           <p class="addr">1420–22 N</p><h3>Talman</h3><p class="bh">Humboldt Park</p></article>
         <article class="bc" data-hood="Logan Square">
-          <div class="ph"><img src="images/img07.jpg" alt="Richmond"></div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/richmond.jpg"><source src="media/richmond.mp4" type="video/mp4"></video></div>
           <p class="addr">1667 N</p><h3>Richmond</h3><p class="bh">Logan Square</p></article>
         <article class="bc" data-hood="Humboldt Park">
-          <div class="ph"><img src="images/img08.jpg" alt="Rockwell / Hirsch"></div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/rockwell.jpg"><source src="media/rockwell.mp4" type="video/mp4"></video></div>
           <p class="addr">1359–2553</p><h3>Rockwell / Hirsch</h3><p class="bh">Humboldt Park</p></article>
         <article class="bc" data-hood="Old Irving Park">
-          <div class="ph"><img src="images/img03.jpg" alt="Lowell"></div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/lowell.jpg"><source src="media/lowell.mp4" type="video/mp4"></video></div>
           <p class="addr">4007–15 N</p><h3>Lowell</h3><p class="bh">Old Irving Park</p></article>
         <article class="bc" data-hood="Old Irving Park">
-          <div class="ph"><img src="images/img09.jpg" alt="Belle Plaine / Kedvale"></div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/belle-plaine.jpg"><source src="media/belle-plaine.mp4" type="video/mp4"></video></div>
           <p class="addr">4045–4127</p><h3>Belle Plaine / Kedvale</h3><p class="bh">Old Irving Park</p></article>
         <article class="bc" data-hood="Old Irving Park">
-          <div class="ph"><img src="images/img10.jpg" alt="Keeler"></div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/keeler.jpg"><source src="media/keeler.mp4" type="video/mp4"></video></div>
           <p class="addr">4120–22 N</p><h3>Keeler</h3><p class="bh">Old Irving Park</p></article>
         <article class="bc" data-hood="Old Irving Park">
-          <div class="ph"><img src="images/img11.jpg" alt="Irving Park BowTruss"></div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/irving-park.jpg"><source src="media/irving-park.mp4" type="video/mp4"></video></div>
           <p class="addr">4317 W</p><h3>Irving Park BowTruss</h3><p class="bh">Old Irving Park</p></article>
         <article class="bc" data-hood="West Town">
-          <div class="ph none">Photo to come</div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/augusta.jpg"><source src="media/augusta.mp4" type="video/mp4"></video></div>
           <p class="addr">2648 W</p><h3>Augusta</h3><p class="bh">West Town</p></article>
         <article class="bc" data-hood="West Town">
-          <div class="ph none">Photo to come</div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/division.jpg"><source src="media/division.mp4" type="video/mp4"></video></div>
           <p class="addr">2540 W</p><h3>Division</h3><p class="bh">West Town</p></article>
         <article class="bc" data-hood="West Town">
           <div class="ph none">Photo to come</div>
           <p class="addr">&nbsp;</p><h3>Grand</h3><p class="bh">West Town</p></article>
         <article class="bc" data-hood="Avondale">
-          <div class="ph none">Photo to come</div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/elston.jpg"><source src="media/elston.mp4" type="video/mp4"></video></div>
           <p class="addr">4901–12 N</p><h3>Elston / Kentucky</h3><p class="bh">Avondale</p></article>
         <article class="bc" data-hood="Avondale">
-          <div class="ph none">Photo to come</div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/milwaukee.jpg"><source src="media/milwaukee.mp4" type="video/mp4"></video></div>
           <p class="addr">3115–28 N</p><h3>Milwaukee / Haussen</h3><p class="bh">Avondale</p></article>
         <article class="bc" data-hood="Jefferson Park">
           <div class="ph none">Photo to come</div>
@@ -367,7 +377,7 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
           <div class="ph none">Photo to come</div>
           <p class="addr">4012–4319 N</p><h3>Keystone / Cullom</h3><p class="bh">Old Irving Park</p></article>
         <article class="bc" data-hood="Logan Square">
-          <div class="ph none">Photo to come</div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/parker.jpg"><source src="media/parker.mp4" type="video/mp4"></video></div>
           <p class="addr">3444 W</p><h3>Parker</h3><p class="bh">Logan Square</p></article>
         <article class="bc" data-hood="Uptown">
           <div class="ph none">Photo to come</div>
@@ -376,10 +386,10 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
           <div class="ph none">Photo to come</div>
           <p class="addr">2615–5657</p><h3>Hollywood / Talman</h3><p class="bh">West Ridge</p></article>
         <article class="bc" data-hood="Lakeview">
-          <div class="ph none">Photo to come</div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/oakdale.jpg"><source src="media/oakdale.mp4" type="video/mp4"></video></div>
           <p class="addr">1237 W</p><h3>Oakdale</h3><p class="bh">Lakeview</p></article>
         <article class="bc" data-hood="Lakeview">
-          <div class="ph none">Photo to come</div>
+          <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/southport.jpg"><source src="media/southport.mp4" type="video/mp4"></video></div>
           <p class="addr">2852–56 N</p><h3>Southport / George</h3><p class="bh">Lakeview</p></article></div>
       <p id="empty" hidden style="color:var(--ink2)">No buildings in that neighborhood yet.</p>
       <div class="note"><h4>Check before this goes out</h4>
@@ -528,4 +538,11 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
     cards.forEach(function(k){var s=(f==='all'||k.dataset.hood===f);k.hidden=!s;if(s)n++});
     empty.hidden=n>0;}});
 })();
+</script>
+<script>
+document.querySelectorAll('.bc').forEach(function(card){
+  var v = card.querySelector('video.bv'); if(!v) return;
+  card.addEventListener('mouseenter', function(){ v.play().catch(function(){}); });
+  card.addEventListener('mouseleave', function(){ v.pause(); v.currentTime = 0; });
+});
 </script>
