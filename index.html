@@ -29,8 +29,8 @@ a{color:inherit}
 h1,h2,h3{margin:0;font-weight:400}
 
 /* utility strip */
-.util{background:rgba(0,0,0,.42);-webkit-backdrop-filter:blur(10px) saturate(140%);
-  backdrop-filter:blur(10px) saturate(140%);position:relative;z-index:51;
+.util{background:rgba(0,0,0,.26);-webkit-backdrop-filter:blur(7px) saturate(130%);
+  backdrop-filter:blur(7px) saturate(130%);position:relative;z-index:51;
   transition:background .3s ease}
 .util .wrap{display:flex;justify-content:flex-end;gap:26px;padding-block:5px}
 .util a{font-family:var(--m);font-size:10px;font-weight:500;letter-spacing:.18em;
@@ -38,13 +38,17 @@ h1,h2,h3{margin:0;font-weight:400}
 .util a:hover{color:#fff}
 
 /* nav */
-.bar{position:sticky;top:0;z-index:50;
-  background:rgba(6,34,46,.30);
-  -webkit-backdrop-filter:blur(10px) saturate(145%);
-  backdrop-filter:blur(10px) saturate(145%);
-  border-bottom:1px solid rgba(255,255,255,.16);
-  transition:background .3s ease,border-color .3s ease}
-.bar.solid{background:var(--deep);border-bottom-color:rgba(65,182,230,.3)}
+.bar{position:sticky;top:0;z-index:50;background:transparent;border-bottom:0}
+/* tint + blur live on a layer that fades out at the bottom, so there is no hard edge */
+.bar::before{content:"";position:absolute;inset:0 0 -22px 0;z-index:-1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(6,34,46,.40) 0%,rgba(6,34,46,.22) 46%,rgba(6,34,46,0) 100%);
+  -webkit-backdrop-filter:blur(7px) saturate(130%);
+  backdrop-filter:blur(7px) saturate(130%);
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 42%,rgba(0,0,0,.45) 72%,transparent 100%);
+  mask-image:linear-gradient(180deg,#000 0%,#000 42%,rgba(0,0,0,.45) 72%,transparent 100%);
+  transition:opacity .3s ease}
+.bar.solid{background:var(--deep);border-bottom:1px solid rgba(65,182,230,.3)}
+.bar.solid::before{opacity:0}
 .util.solid{background:#000}
 .bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:9px}
 .word{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
