@@ -113,6 +113,8 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 .ph{aspect-ratio:16/11;overflow:hidden;background:#E8F2F7;position:relative}
 .ph img,.ph video{width:100%;height:100%;object-fit:cover;transition:transform .5s;display:block}
 .bc:hover .ph video{transform:scale(1.03)}
+.ph img.kb{transition:transform 7s cubic-bezier(.22,.08,.26,1)}
+.bc:hover .ph img.kb{transform:scale(1.2) translate(-2.5%,1.5%)}
 .bc:hover .ph img,.lc:hover .ph img{transform:scale(1.04)}
 .ph.none{display:grid;place-items:center;font-family:var(--m);font-size:11px;
   letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
@@ -384,7 +386,7 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
           <div class="ph none">Photo to come</div>
           <p class="addr">1467 W</p><h3>Greenview / Cuyler</h3><p class="bh">Uptown</p></article>
         <article class="bc" data-hood="West Ridge">
-          <div class="ph none">Photo to come</div>
+          <div class="ph"><img class="kb" src="media/hollywood-talman.jpg" alt="Hollywood / Talman"></div>
           <p class="addr">2615–5657</p><h3>Hollywood / Talman</h3><p class="bh">West Ridge</p></article>
         <article class="bc" data-hood="Lakeview">
           <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/oakdale.jpg"><source src="media/oakdale.mp4" type="video/mp4"></video></div>
