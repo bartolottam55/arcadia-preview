@@ -77,10 +77,19 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
   letter-spacing:.17em;text-transform:uppercase;color:#fff;margin:.08em 0 0}
 
 /* full-bleed film at the top of the homepage */
-.film{position:relative;width:100%;background:#000;overflow:hidden;
-  height:clamp(380px,78vh,820px);
+.film{position:relative;width:100%;overflow:hidden;background:var(--deep);
+  height:clamp(460px,86vh,900px);
   margin-top:calc(-1 * var(--stack,96px))}
-.film video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+/* blurred still fills the sides so a vertical clip is not sitting in black bars */
+.film .film-bg{position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;
+  filter:blur(34px) saturate(130%) brightness(.55);transform:scale(1.06)}
+.film video{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:contain;object-position:center}
+@media(max-width:700px){
+  .film{height:min(92vh,760px)}
+  .film video{object-fit:cover}
+  .film .film-bg{display:none}
+}
 .film::after{content:"";position:absolute;left:0;right:0;bottom:0;height:38%;
   background:linear-gradient(180deg,rgba(6,34,46,0) 0%,rgba(6,34,46,.55) 100%);pointer-events:none}
 .film-mute{position:absolute;right:20px;bottom:20px;z-index:3;
@@ -250,6 +259,7 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
 <main id="top">
 <div class="page" id="page-home">
   <div class="film">
+    <img class="film-bg" src="media/hero.jpg" alt="" aria-hidden="true">
     <video id="heroFilm" autoplay muted loop playsinline preload="metadata" poster="media/hero.jpg">
       <source src="media/hero.mp4" type="video/mp4">
     </video>
