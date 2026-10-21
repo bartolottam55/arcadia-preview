@@ -537,11 +537,58 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
 })();
 </script>
 <script>
-document.querySelectorAll('.bc').forEach(function(card){
-  var v = card.querySelector('video.bv'); if(!v) return;
-  card.addEventListener('mouseenter', function(){ v.play().catch(function(){}); });
-  card.addEventListener('mouseleave', function(){ v.pause(); v.load(); });
-});
+(function(){
+  var cards = [].slice.call(document.querySelectorAll('.bc'))
+                 .filter(function(c){ return c.querySelector('video.bv'); });
+  if(!cards.length) return;
+
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var touch   = window.matchMedia('(hover: none)').matches;
+
+  // --- pointer devices: hover to play ---
+  if(!touch){
+    cards.forEach(function(card){
+      var v = card.querySelector('video.bv');
+      card.addEventListener('mouseenter', function(){ if(!reduced) v.play().catch(function(){}); });
+      card.addEventListener('mouseleave', function(){ v.pause(); v.load(); });
+    });
+    return;
+  }
+
+  // --- touch devices: play whichever card is nearest the middle of the screen ---
+  if(reduced) return;
+  var playing = null;
+  function pick(){
+    var mid = window.innerHeight / 2, best = null, bestDist = Infinity;
+    cards.forEach(function(c){
+      var r = c.getBoundingClientRect();
+      if(r.bottom < 0 || r.top > window.innerHeight) return;
+      var d = Math.abs((r.top + r.bottom) / 2 - mid);
+      if(d < bestDist){ bestDist = d; best = c; }
+    });
+    if(best === playing) return;
+    if(playing){ var pv = playing.querySelector('video.bv'); pv.pause(); pv.load(); }
+    playing = best;
+    if(playing) playing.querySelector('video.bv').play().catch(function(){});
+  }
+  var tick;
+  function onScroll(){ clearTimeout(tick); tick = setTimeout(pick, 110); }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll, {passive:true});
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden && playing){ playing.querySelector('video.bv').pause(); }
+    else onScroll();
+  });
+  // a tap on a card also starts it, for anyone who stops scrolling
+  cards.forEach(function(c){
+    c.addEventListener('click', function(){
+      if(playing === c) return;
+      if(playing){ var pv = playing.querySelector('video.bv'); pv.pause(); pv.load(); }
+      playing = c; c.querySelector('video.bv').play().catch(function(){});
+    });
+  });
+  pick();
+})();
 </script>
 
 <style>
