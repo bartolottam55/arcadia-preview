@@ -544,6 +544,6 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
 document.querySelectorAll('.bc').forEach(function(card){
   var v = card.querySelector('video.bv'); if(!v) return;
   card.addEventListener('mouseenter', function(){ v.play().catch(function(){}); });
-  card.addEventListener('mouseleave', function(){ v.pause(); v.currentTime = 0; });
+  card.addEventListener('mouseleave', function(){ v.pause(); v.load(); });
 });
 </script>
