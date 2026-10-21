@@ -113,8 +113,8 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 .ph{aspect-ratio:16/11;overflow:hidden;background:#E8F2F7;position:relative}
 .ph img,.ph video{width:100%;height:100%;object-fit:cover;transition:transform .5s;display:block}
 .bc:hover .ph video{transform:scale(1.03)}
-.ph img.kb{transition:transform 7s cubic-bezier(.22,.08,.26,1)}
-.bc:hover .ph img.kb{transform:scale(1.2) translate(-2.5%,1.5%)}
+.ph img.kb{transition:transform 1.1s cubic-bezier(.22,.7,.3,1)}
+.bc:hover .ph img.kb{transform:scale(1.34) translate(-3%,2%);transition:transform 2.4s cubic-bezier(.2,.55,.3,1)}
 .bc:hover .ph img,.lc:hover .ph img{transform:scale(1.04)}
 .ph.none{display:grid;place-items:center;font-family:var(--m);font-size:11px;
   letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
@@ -659,78 +659,206 @@ document.querySelectorAll('.bc').forEach(function(card){
              "Which neighborhoods?","Do you allow pets?","Book a tour"];
 
   // ---- intents: [name, keywords, reply(), chips] ----
+  var PAGES = {search:"Apartment Search", buildings:"Our Buildings", about:"Get to Know Us",
+               hoods:"Neighborhoods", residents:"Residents", contact:"Contact"};
   var I = [
-   ["available", ["available","availab","vacan","open","listing","apartment","rent a","looking for","any units","what do you have","move in","1 bed","one bed","2 bed","two bed","studio","bedroom"],
+
+   // ============ FINDING A PLACE ============
+   ["available", ["available","availab","vacan","open","listing","apartment","rent a","looking for","any units","what do you have","move in","1 bed","one bed","2 bed","two bed","studio","bedroom","show me","anything in"],
     function(q){
       var m = UNITS, note="";
-      var cheap = q.match(/under\s*\$?\s*(\d{3,4})/);
-      if(cheap){ var cap=+cheap[1]; m = UNITS.filter(function(u){return u.rent<=cap;});
-        note = m.length? "" : "Nothing under $"+cap+" right now, but here is everything open:"; if(!m.length) m=UNITS; }
+      var cheap = q.match(/under\s*\$?\s*(\d{3,4})/) || q.match(/less than\s*\$?\s*(\d{3,4})/);
+      if(cheap){ var cap=+cheap[1]; var f=UNITS.filter(function(u){return u.rent<=cap;});
+        if(f.length) m=f; else note="Nothing under $"+cap+" at the moment. Here is everything open:"; }
       HOODS.forEach(function(h){ if(q.indexOf(h.toLowerCase())>-1){ var f=UNITS.filter(function(u){return u.hood===h;});
-        if(f.length) m=f; else { note="Nothing open in "+h+" at the moment. Here is what is available:"; m=UNITS; } }});
+        if(f.length){ m=f; note=""; } else { note="Nothing open in "+h+" right now. Here is what is available:"; m=UNITS; } }});
       return (note||"Here is what is open right now:")+unitList(m)+
-        "Rents and availability change, so "+ext(RENTALS,"the live list")+" is the final word. Want to "+
-        ext(APPLY,"start an application")+"?";
+        "Availability moves quickly, so "+ext(RENTALS,"the live list")+" is the final word. Want to "+ext(APPLY,"start an application")+"?";
     }, ["How do I apply?","Book a tour","Which neighborhoods?"]],
 
-   ["apply", ["apply","application","applic","how do i get","sign up","lease","paperwork"],
-    function(){ return "You can "+ext(APPLY,"start an application online")+" for any open apartment — no account needed to begin. "+
-      "Already applied? Check where it stands in the "+ext(PORTAL,"resident portal")+"."; },
-    ["What's available?","How much is the fee?","Book a tour"]],
+   ["budget", ["cheapest","least expensive","lowest","most affordable","price range","how much are","what do they cost","rent range","average rent"],
+    function(){ var lo=UNITS.slice().sort(function(a,b){return a.rent-b.rent;});
+      return "Right now open apartments run <strong>$"+lo[0].rent.toLocaleString()+" to $"+lo[lo.length-1].rent.toLocaleString()+
+      " a month</strong>. The least expensive is "+lo[0].b+" "+lo[0].u+" in "+lo[0].hood+". Rents vary by building, size and how recently the apartment was renovated."; },
+    ["What's available?","Which neighborhoods?","Book a tour"]],
 
-   ["rent", ["pay rent","pay my rent","rent payment","autopay","balance","make a payment","pay online","bill","where do i pay","rent due","late fee","receipt","payment history","ledger"],
-    function(){ return "Rent is paid in the "+ext(PORTAL,"resident portal")+" — you can pay once, set up autopay, or check your balance and history there."; },
-    ["Something's broken","Check application status"]],
-
-   ["maint", ["work order","workorder","work-order","service request","maintenance request","submit a request","put in a request","file a","report a","ticket","broken","broke","repair","fix","fixed","maintenance","not working","doesn't work","does not work","leak","leaking","heat","furnace","radiator","no hot water","hot water","clog","clogged","drain","toilet","sink","pest","emergency","bug","roach","mice","rodent","boiler","ac ","air condition","window","door","lock","light","outlet","power","something wrong","issue","problem"],
-    function(q){
-      var urgent = /flood|fire|gas|smoke|no heat|burst|sparking|emergenc|carbon/.test(q);
-      return (urgent ? "<strong>If this is an emergency — gas, fire, flooding or no heat — call the office now rather than waiting on a message.</strong><br><br>" : "")+
-        "Submit a maintenance request in the "+ext(PORTAL,"resident portal")+". Add photos if you can; it goes straight to our own maintenance team and you can follow it through to close.";
-    }, ["Pay my rent","Talk to someone"]],
-
-   ["status", ["status","did i get","approved","hear back","decision","where is my applic"],
-    function(){ return "Sign in to the "+ext(PORTAL,"resident portal")+" to see where your application stands. If it has been a few days and nothing has changed there, "+nav("contact","send us a note")+" and we will chase it."; },
-    ["How do I apply?","Talk to someone"]],
-
-   ["hoods", ["neighborhood","neighbourhood","where are you","what area","location","part of town","which area","hood"],
-    function(){ return "We are on the north and northwest sides — "+HOODS.join(", ")+
-      ". Each one has a write-up on the "+nav("hoods","neighborhoods page")+" covering what it is actually like to live there."; },
-    ["What's available?","Which buildings?"]],
-
-   ["bldgs", ["building","how many buildings","portfolio","properties","which buildings","your buildings"],
-    function(){ return "You can see them all on the "+nav("buildings","our buildings page")+", filtered by neighborhood. Most are a century old — we keep the bay windows, trim and terrazzo, and replace everything behind the walls. Hover any building to see it in motion."; },
-    ["Which neighborhoods?","What's available?"]],
-
-   ["about", ["who are you","about","family","owner","company","arcadia","history","how long"],
-    function(){ return "Arcadia is a small, family-run company in Chicago. We restore old apartment buildings and then we keep them rather than flipping them — so the people looking after your building are the people who own it. More on the "+nav("about","get to know us page")+"."; },
-    ["Which neighborhoods?","What's available?"]],
-
-   ["tour", ["tour","see it","viewing","visit","showing","walk through","look at","in person"],
-    function(){ return "Happy to show you around. "+nav("contact","Send us a note")+" with the apartment you are interested in and a couple of times that suit you, and someone will come back to you."; },
+   ["movein", ["move in date","when can i move","how soon","available date","earliest","next month","asap","immediately"],
+    function(){ return "Move-in dates are listed with each apartment:"+unitList(UNITS)+
+      "If none of those line up, tell us the window you need on the "+nav("contact","contact page")+" — things open up regularly and we keep a list."; },
     ["What's available?","How do I apply?"]],
 
-   ["contact", ["contact","talk to someone","call","phone","email","reach you","speak to","human","person","office hours","who do i call","property manager","landlord","management","complaint","speak with"],
-    function(){ return "The quickest way is the form on the "+nav("contact","contact page")+" — a person reads those. Office hours are Monday to Friday, 9 to 5."; },
-    ["Book a tour","What's available?"]],
+   ["apply", ["apply","application","applic","how do i get","sign up","paperwork","forms","rental application"],
+    function(){ return "You can "+ext(APPLY,"apply online")+" for any open apartment — no account needed to start, and you can save and come back. "+
+      "Once it is in, you can track it in the "+ext(PORTAL,"resident portal")+"."; },
+    ["What do I need to apply?","Book a tour","What's available?"]],
 
-   ["unknown-policy", ["pet","dog","cat","parking","laundry","washer","dryer","utilities","heat included","square feet","sq ft","storage","dishwasher","balcony","bike","deposit","fee","furnished","sublet","smoking","roommate","lease term","how long is the lease"],
-    function(){ return "That one varies by building, and I do not want to guess and get it wrong. "+nav("contact","Ask us directly")+" and we will give you a straight answer for the specific apartment."; },
-    ["What's available?","Book a tour"]],
-
-   ["screening", ["qualify","credit score","income","background check","evict","approved","do i make enough","requirements","criteria","voucher","section 8","chance of getting"],
-    function(){ return "Every application is reviewed under the same published criteria, and I am not the right place to work out whether a particular person will be approved. "+
-      ext(APPLY,"Start an application")+" and the leasing team will take it from there, or "+nav("contact","ask them directly")+" first if you would rather."; },
+   ["applyneeds", ["what do i need","documents","paystub","pay stub","proof of income","id ","photo id","references","co-signer","cosigner","guarantor","application fee","how much to apply"],
+    function(){ return "The "+ext(APPLY,"online application")+" walks you through exactly what it asks for, and it is the authoritative list. "+
+      "Fees and document requirements can differ by building, so if you want to know before you start, "+nav("contact","ask us")+" and we will tell you straight."; },
     ["How do I apply?","Talk to someone"]],
 
-   ["hi", ["hi","hey","hello","yo ","good morning","good afternoon","sup"],
-    function(){ return "Hi! I can help with what is available, how to apply, paying rent, maintenance, or anything about the neighborhoods. What are you after?"; },
-    ASK.slice(0,4)],
+   ["tour", ["tour","see it","viewing","visit","showing","walk through","walkthrough","look at","in person","open house","check it out"],
+    function(){ return "Happy to show you around. "+nav("contact","Send a note")+" with the apartment you are interested in and a couple of times that work, and someone will come back to you to set it up."; },
+    ["What's available?","How do I apply?"]],
 
-   ["thanks", ["thank","thanks","cheers","appreciate","great","perfect","awesome"],
-    function(){ return "Any time. Anything else I can dig up?"; }, ASK.slice(0,3)],
+   // ============ THE BUILDINGS & AREA ============
+   ["hoods", ["neighborhood","neighbourhood","where are you","what area","location","part of town","which area","hood","what's it like","safe","walkable","restaurants","coffee","grocery"],
+    function(q){
+      var hit = HOODS.filter(function(h){ return q.indexOf(h.toLowerCase())>-1; });
+      if(hit.length) return "We have buildings in <strong>"+hit[0]+"</strong>. There is a proper write-up of what it is actually like to live there on the "+
+        nav("hoods","neighborhoods page")+" — and you can filter "+nav("buildings","our buildings")+" down to just that area.";
+      return "We are on the north and northwest sides: "+HOODS.join(", ")+
+      ". The "+nav("hoods","neighborhoods page")+" has a write-up on each one — parks, trains, what the blocks are like.";
+    }, ["Which buildings?","What's available?","How's the commute?"]],
 
-   ["bye", ["bye","goodbye","see you","that's all","thats all","nothing else"],
+   ["transit", ["train","cta","blue line","brown line","red line","bus","commute","downtown","loop","get to work","transit","metra","walk to"],
+    function(){ return "Most of our buildings are a short walk from a train. Old Irving Park, Logan Square, Avondale and Jefferson Park sit on the Blue Line; Lakeview is near the Brown and Red; Jefferson Park also has Metra. "+
+      "The "+nav("hoods","neighborhoods page")+" notes the nearest stop for each area."; },
+    ["Which neighborhoods?","What's available?"]],
+
+   ["bldgs", ["building","how many buildings","portfolio","properties","which buildings","your buildings","vintage","old building","architecture","greystone"],
+    function(){ return "They are all on the "+nav("buildings","our buildings page")+", and you can filter by neighborhood. Most are a century old — we keep the bay windows, the original trim and the terrazzo, and replace everything behind the walls. Hover any building and it comes to life."; },
+    ["Which neighborhoods?","What's available?"]],
+
+   // ============ POLICIES THAT VARY ============
+   ["pets", ["pet","dog","cat","animal","breed","pet rent","pet deposit","service animal","emotional support"],
+    function(){ return "Pet policy depends on the building, so I do not want to promise you something that turns out not to apply. "+
+      nav("contact","Ask us about the specific apartment")+" and you will get a straight answer. If it is a service or assistance animal, say so — that is handled differently from a pet."; },
+    ["What's available?","Talk to someone"]],
+
+   ["parking", ["parking","park my car","garage","spot","permit","street parking","driveway"],
+    function(){ return "Some buildings have off-street parking or a garage, and some are street-only with a city permit zone. It is building by building — "+
+      nav("contact","tell us which apartment")+" and we will confirm."; },
+    ["What's available?","Which neighborhoods?"]],
+
+   ["laundry", ["laundry","washer","dryer","in unit","in-unit","laundromat","wash clothes"],
+    function(){ return "Varies by building — some have in-unit, some have a shared laundry room. Worth asking about the specific apartment on the "+nav("contact","contact page")+"."; },
+    ["What's available?","Book a tour"]],
+
+   ["utils", ["utilities","heat included","water","gas bill","electric","what's included","included in rent","who pays"],
+    function(){ return "What is covered differs between buildings — in older Chicago buildings heat is often included, but not always. "+
+      nav("contact","Ask about the apartment you are looking at")+" and we will tell you exactly what is on you and what is on us."; },
+    ["What's available?","Talk to someone"]],
+
+   ["size", ["square feet","sq ft","sqft","how big","size","floor plan","floorplan","layout","dimensions"],
+    function(){ return "We do not publish square footage, because in vintage buildings it is rarely measured consistently and the number tends to mislead. A tour gives you a far better sense — "+
+      nav("contact","we will set one up")+"."; },
+    ["Book a tour","What's available?"]],
+
+   ["amen", ["dishwasher","air conditioning","central air","balcony","porch","yard","outdoor","storage","bike","elevator","gym","roof"],
+    function(){ return "Features vary a lot between buildings and even between units in the same building. Tell us which apartment caught your eye on the "+
+      nav("contact","contact page")+" and we will go through what it has."; },
+    ["What's available?","Book a tour"]],
+
+   ["lease", ["lease term","how long is the lease","12 month","month to month","short term","renew","renewal","sublet","sublease","break my lease","end my lease"],
+    function(q){
+      if(/renew/.test(q)) return "Renewals are handled by the office — they will reach out ahead of your end date, and you can always "+nav("contact","get in touch")+" first if you want to talk it through early.";
+      if(/break|end my lease|sublet|sublease/.test(q)) return "That needs a real conversation rather than a chatbot. "+nav("contact","Get in touch with the office")+" and they will walk you through the options for your specific lease.";
+      return "Lease length depends on the apartment and when it is available. "+nav("contact","Ask us")+" about the one you are interested in.";
+    }, ["Talk to someone","What's available?"]],
+
+   // ============ CURRENT RESIDENTS ============
+   ["rent", ["pay rent","pay my rent","rent payment","autopay","balance","make a payment","pay online","bill","where do i pay","rent due","late fee","receipt","payment history","ledger","money order","check"],
+    function(q){
+      if(/late|fee|behind|can't pay|cant pay/.test(q))
+        return "If you are going to be late, the best thing is to tell the office before the due date rather than after — "+nav("contact","get in touch")+" and they will work with you. You can see your balance any time in the "+ext(PORTAL,"resident portal")+".";
+      return "Rent goes through the "+ext(PORTAL,"resident portal")+" — pay once, set up autopay, or pull your balance, receipts and payment history.";
+    }, ["Submit a work order","Talk to someone"]],
+
+   ["maint", ["work order","workorder","work-order","service request","maintenance request","submit a request","put in a request","file a","report a","ticket","broken","broke","repair","fix","fixed","maintenance","not working","doesn't work","does not work","leak","leaking","clog","clogged","drain","toilet","sink","pest","bug","roach","mice","rodent","window","door","light","outlet","power","something wrong","issue","problem","stove","fridge","refrigerator","dishwasher broke"],
+    function(q){
+      var urgent = /flood|fire|gas|smoke|burst|sparking|emergenc|carbon|no heat|sewage/.test(q);
+      return (urgent ? "<strong>If this is an emergency — gas, fire, flooding, sparking wiring or no heat — call the office now instead of waiting on a message.</strong><br><br>" : "")+
+        "Submit it in the "+ext(PORTAL,"resident portal")+" — there is a maintenance request form there. Add photos if you can and describe where it is. "+
+        "It goes straight to our own maintenance team, not an outside call centre, and you can follow it through to close.";
+    }, ["It's an emergency","Pay my rent","Talk to someone"]],
+
+   ["emergency", ["emergency","urgent","right now","after hours","middle of the night","weekend","flooding","fire","gas leak","no heat","burst pipe","sparking"],
+    function(){ return "<strong>For anything dangerous — gas, fire, flooding, sparking wiring or no heat in winter — call the office directly rather than submitting a form.</strong> "+
+      "The number is on the "+nav("contact","contact page")+". For gas you smell or fire, call 911 first, then us."; },
+    ["Talk to someone","Submit a work order"]],
+
+   ["heat", ["heat","heating","cold","radiator","furnace","boiler","too hot","thermostat","no hot water","hot water"],
+    function(){ return "Chicago has a heat ordinance that requires landlords to provide heat from mid-September through the end of May, with minimum indoor temperatures set by the city. "+
+      "If your apartment is not getting there, put a work order in the "+ext(PORTAL,"resident portal")+" and call the office — no heat is treated as urgent, not routine."; },
+    ["Submit a work order","Talk to someone"]],
+
+   ["keys", ["lock out","locked out","lockout","key","lost my key","spare key","mailbox key","buzzer","intercom","fob","entry code"],
+    function(){ return "Call the office for a lockout — it is faster than anything online, and the number is on the "+nav("contact","contact page")+". "+
+      "For a replacement or extra key, a "+ext(PORTAL,"work order")+" is the right route."; },
+    ["Talk to someone","Submit a work order"]],
+
+   ["neighbors", ["noise","noisy","loud","neighbor","neighbour","upstairs","complaint","smoking","party","smell"],
+    function(){ return "Tell the office — "+nav("contact","get in touch")+" with the building, the apartment if you know it, and roughly when it happens. They deal with it directly, and you do not have to be the one to have that conversation with a neighbour."; },
+    ["Talk to someone","Submit a work order"]],
+
+   ["trash", ["trash","garbage","recycling","bins","dumpster","bulk","mattress","what day"],
+    function(){ return "Pickup days and where the bins live are building-specific. If something is overflowing or a bin is missing, put a "+ext(PORTAL,"work order")+" in and we will sort it."; },
+    ["Submit a work order","Talk to someone"]],
+
+   ["snow", ["snow","shovel","ice","salt","sidewalk","winter"],
+    function(){ return "We handle snow and ice at our buildings. If a walk or stair is unsafe, flag it straight away with a "+ext(PORTAL,"work order")+" — that one we treat as urgent."; },
+    ["Submit a work order","Talk to someone"]],
+
+   ["mail", ["mail","package","delivery","amazon","usps","mailbox","parcel"],
+    function(){ return "Mail and package setup depends on the building — some have a secure vestibule, some do not. If your mailbox is damaged or the lock is not working, put in a "+ext(PORTAL,"work order")+"."; },
+    ["Submit a work order","Talk to someone"]],
+
+   ["moveout", ["move out","moving out","notice","vacate","deposit back","security deposit","last month","final inspection","leaving"],
+    function(){ return "Notice periods and deposit handling come from your lease and from Chicago's tenant ordinance, so I do not want to quote you a number that is wrong for your situation. "+
+      nav("contact","Get in touch with the office")+" and they will tell you exactly what applies to your lease."; },
+    ["Talk to someone","Pay my rent"]],
+
+   ["occupants", ["roommate","add someone","my partner","moving in with","guest","long term guest","another person","subletting to"],
+    function(){ return "Anyone living there needs to be on the lease, so that goes through the office rather than being something you can do yourself. "+
+      nav("contact","Start the conversation here")+" and they will tell you what is needed."; },
+    ["Talk to someone","How do I apply?"]],
+
+   ["status", ["status","did i get","approved","hear back","decision","where is my applic","any word"],
+    function(){ return "Sign in to the "+ext(PORTAL,"resident portal")+" to see where it stands. If it has been a few days with no change, "+nav("contact","send us a note")+" and we will chase it."; },
+    ["How do I apply?","Talk to someone"]],
+
+   ["leasecopy", ["copy of my lease","my lease","lease document","paperwork copy","find my lease"],
+    function(){ return "Your lease and other documents live in the "+ext(PORTAL,"resident portal")+" under your account. If it is not there, "+nav("contact","ask the office")+" and they will send it over."; },
+    ["Pay my rent","Talk to someone"]],
+
+   // ============ NAVIGATION ============
+   ["navigate", ["where do i find","how do i get to","take me to","show me the page","navigate","where is the","can't find","cant find","menu","go to"],
+    function(q){
+      for(var k in PAGES){ if(q.indexOf(k)>-1 || q.indexOf(PAGES[k].toLowerCase())>-1)
+        return "That is the "+nav(k,PAGES[k]+" page")+" — click through and I will get out of your way."; }
+      return "Here is the whole site: "+nav("search","Apartment Search")+" for what is open, "+nav("buildings","Our Buildings")+
+      " for the portfolio, "+nav("hoods","Neighborhoods")+" for what each area is like, "+nav("about","Get to Know Us")+
+      " for who we are, and "+nav("contact","Contact")+" to reach a person. Where are you trying to get to?";
+    }, ["What's available?","Which buildings?","Talk to someone"]],
+
+   ["help", ["what can you do","help me","how do you work","what do you know","who are you bot","are you a bot","are you real","ai"],
+    function(){ return "I am Arcadia's assistant — not a person, but I know the site well. I can help you find an open apartment, explain how to apply, point you to rent payments and work orders, tell you about the neighborhoods, or walk you to any page. "+
+      "Anything I am unsure about, I will send you to a human rather than guess."; },
+    ["What's available?","Submit a work order","Which neighborhoods?"]],
+
+   // ============ COMPANY / META ============
+   ["about", ["who are you","about","family","owner","company","arcadia","history","how long","mike","john"],
+    function(){ return "Arcadia is a small, family-run company in Chicago. We buy century-old apartment buildings that have been under-loved, put them back together properly, and then keep them rather than flipping them — so the people looking after your building are the people who own it. More on the "+nav("about","get to know us page")+"."; },
+    ["Which buildings?","Which neighborhoods?"]],
+
+   ["contact", ["contact","talk to someone","call","phone","email","reach you","speak to","human","person","office hours","who do i call","property manager","landlord","management","speak with","real person"],
+    function(){ return "The quickest route is the form on the "+nav("contact","contact page")+" — a person reads those, and office hours are Monday to Friday, 9 to 5. Say which building or apartment you mean and it will get to the right person faster."; },
+    ["Book a tour","What's available?"]],
+
+   ["screening", ["qualify","credit score","income","background check","evict","eviction","do i make enough","requirements","criteria","voucher","section 8","chance of getting","will i be approved","bad credit"],
+    function(){ return "Every application is reviewed under the same published criteria, and working out whether a particular person will be approved is not something I should be doing. "+
+      ext(APPLY,"Start an application")+" and the leasing team takes it from there — or "+nav("contact","talk to them first")+" if you would rather ask before applying."; },
+    ["How do I apply?","Talk to someone"]],
+
+   ["hi", ["hi","hey","hello","yo ","good morning","good afternoon","good evening","sup","howdy"],
+    function(){ return "Hi! I can help with open apartments, applying, rent, work orders, the neighborhoods, or just finding your way around the site. What do you need?"; },
+    ["What's available?","How do I apply?","Pay my rent","Submit a work order"]],
+
+   ["thanks", ["thank","thanks","cheers","appreciate","great","perfect","awesome","helpful","nice"],
+    function(){ return "Any time. Anything else?"; }, ["What's available?","Talk to someone"]],
+
+   ["bye", ["bye","goodbye","see you","that's all","thats all","nothing else","good night"],
     function(){ return "Good luck with the search — and "+nav("contact","we are here")+" whenever you need us."; }, []]
   ];
 
