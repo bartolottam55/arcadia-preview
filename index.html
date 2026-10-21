@@ -42,7 +42,9 @@ h1,h2,h3{margin:0;font-weight:400}
   text-transform:uppercase;line-height:1}
 .bar nav{display:flex;gap:30px}
 .bar nav a{font-size:16px;font-weight:500;color:#fff;text-decoration:none}
-.bar nav a:hover{color:var(--blue)}
+.bar nav a:hover,.bar nav a:focus,.bar nav a:active{color:var(--blue)}
+.bar nav a:focus-visible{outline-color:var(--blue)}
+.bar nav a.on{color:var(--blue)}
 .menub{display:none;font-family:var(--m);font-size:12px;letter-spacing:.2em;
   text-transform:uppercase;color:#fff;background:none;border:0;cursor:pointer}
 @media(max-width:1000px){.bar nav{display:none}.menub{display:block}}
@@ -232,7 +234,7 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
   <section class="panel flip">
     <div class="wrap">
       <p class="eyebrow">The portfolio</p>
-      <h2>Twenty-six buildings, all of them old.</h2>
+      <h2>Old buildings, kept properly.</h2>
       <p class="body">Greystones and walk-ups across Chicago&rsquo;s north and northwest sides &mdash; Old Irving Park, Humboldt Park, Logan Square, Avondale, West Town, Lakeview, Jefferson Park and Uptown. We buy them tired and put them back together, and we keep the things that can&rsquo;t be replaced.</p>
       <a class="alink" href="#buildings">See our buildings <span class="circ">&rarr;</span></a>
     </div>
@@ -243,8 +245,8 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
   <section class="panel">
     <div class="wrap">
       <p class="eyebrow">Get to know us</p>
-      <h2>A real person picks up.</h2>
-      <p class="body">No call centre, no ticket number that disappears into a queue. Maintenance goes straight to our own people, and we would rather fix something properly once than send someone back three times.</p>
+      <h2>Ask us anything, any hour.</h2>
+      <p class="body">Questions get answered right away, day or night, and maintenance requests go straight to our own team. We would rather fix something properly once than send someone back three times.</p>
       <a class="alink" href="#about">Get to know us <span class="circ">&rarr;</span></a>
     </div>
   </section>
@@ -255,7 +257,7 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
     <div class="wrap">
       <p class="eyebrow">Already live with us</p>
       <h2>Rent, repairs and applications in one place.</h2>
-      <p class="body">One login for all of it, and a person on the other end of it.</p>
+      <p class="body">One login for all of it.</p>
       <a class="alink" href="#residents">Resident services <span class="circ">&rarr;</span></a>
     </div>
   </section>
@@ -392,8 +394,8 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
   <section class="panel flip" id="about">
     <div class="wrap">
       <p class="eyebrow">Get to know us</p>
-      <h2>A real person picks up.</h2>
-      <p class="body">No call centre, no ticket number that disappears into a queue. Maintenance goes straight to our own people, and we would rather fix something properly once than send someone back three times.</p>
+      <h2>Ask us anything, any hour.</h2>
+      <p class="body">Questions get answered right away, day or night, and maintenance requests go straight to our own team. We would rather fix something properly once than send someone back three times.</p>
       <a class="alink" href="#residents">Resident services <span class="circ">&rarr;</span></a>
     </div>
   </section>
