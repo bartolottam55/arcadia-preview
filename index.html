@@ -65,8 +65,26 @@ h1,h2,h3{margin:0;font-weight:400}
 h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
   line-height:1.16;max-width:19ch;letter-spacing:-.01em}
 .panel p.body{font-size:clamp(18px,1.5vw,21px);max-width:52ch;margin:24px 0 0}
-.hero-word{font-weight:300;font-size:clamp(54px,13vw,166px);line-height:.9;
-  letter-spacing:.17em;text-transform:uppercase;color:#fff;margin:.1em 0 0}
+.hero-word{font-weight:300;font-size:clamp(40px,6.4vw,88px);line-height:.95;
+  letter-spacing:.17em;text-transform:uppercase;color:#fff;margin:.08em 0 0}
+
+/* full-bleed film at the top of the homepage */
+.film{position:relative;width:100%;background:#000;overflow:hidden;
+  height:clamp(380px,78vh,820px)}
+.film video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.film::after{content:"";position:absolute;left:0;right:0;bottom:0;height:38%;
+  background:linear-gradient(180deg,rgba(6,34,46,0) 0%,rgba(6,34,46,.55) 100%);pointer-events:none}
+.film-mute{position:absolute;right:20px;bottom:20px;z-index:3;
+  background:rgba(6,34,46,.55);color:#fff;border:1px solid rgba(255,255,255,.3);
+  border-radius:100px;padding:9px 16px;cursor:pointer;
+  font-family:var(--m);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.film-mute:hover{background:var(--blue);color:var(--deep);border-color:var(--blue)}
+
+/* compact intro: wordmark beside the copy */
+.panel.intro{padding-block:clamp(40px,5.5vw,68px)}
+.intro-grid{display:grid;grid-template-columns:auto 1fr;gap:clamp(28px,6vw,80px);align-items:center}
+.intro-grid .copy p{margin:0;font-size:clamp(17px,1.5vw,20.5px);max-width:50ch;color:#04161E}
+@media(max-width:860px){.intro-grid{grid-template-columns:1fr;gap:26px}}
 .hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,56px);margin-top:clamp(28px,5vw,60px)}
 @media(max-width:860px){.hero-grid{grid-template-columns:1fr}}
 .hero-grid .col2 p{margin:0;font-size:clamp(18px,1.6vw,22px);color:#04161E}
@@ -222,21 +240,25 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
 
 <main id="top">
 <div class="page" id="page-home">
-  <section class="panel">
-    <div class="wrap">
-      <p class="eyebrow">A family business in Chicago</p>
-      <h1 class="hero-word">Arcadia</h1>
-      <div class="hero-grid">
-        <div></div>
-        <div class="col2">
-          <p>Welcome home to Arcadia. We're a small, family-run company and we live in this city too. We restore old Chicago apartment buildings and then we stay &mdash; so the person who answers when your radiator quits is the person who owns the building.</p>
-          <a class="alink" href="#search">Find an apartment <span class="circ">&rarr;</span></a>
-        </div>
+  <div class="film">
+    <video id="heroFilm" autoplay muted loop playsinline preload="metadata" poster="media/hero.jpg">
+      <source src="media/hero.mp4" type="video/mp4">
+    </video>
+    <button class="film-mute" id="filmMute" type="button" aria-label="Unmute">Sound on</button>
+  </div>
+
+  <section class="panel intro">
+    <div class="wrap intro-grid">
+      <div>
+        <p class="eyebrow">A family business in Chicago</p>
+        <h1 class="hero-word">Arcadia</h1>
+      </div>
+      <div class="copy">
+        <p>Welcome home to Arcadia. We&rsquo;re a small, family-run company and we live in this city too. We restore old Chicago apartment buildings and then we stay &mdash; so the person who answers when your radiator quits is the person who owns the building.</p>
+        <a class="alink" href="#search">Find an apartment <span class="circ">&rarr;</span></a>
       </div>
     </div>
   </section>
-
-  <div class="band hero"><img src="images/img02.jpg" alt="A restored Arcadia building in Chicago"></div>
 
   <section class="panel flip">
     <div class="wrap">
@@ -534,6 +556,14 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
     var f=c.dataset.f,n=0;
     cards.forEach(function(k){var s=(f==='all'||k.dataset.hood===f);k.hidden=!s;if(s)n++});
     empty.hidden=n>0;}});
+})();
+</script>
+<script>
+(function(){
+  var v=document.getElementById('heroFilm'), b=document.getElementById('filmMute');
+  if(!v||!b) return;
+  b.onclick=function(){ v.muted=!v.muted; b.textContent = v.muted ? 'Sound on' : 'Sound off'; if(!v.muted) v.play(); };
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){ v.removeAttribute('autoplay'); v.pause(); }
 })();
 </script>
 <script>
