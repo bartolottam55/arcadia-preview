@@ -655,7 +655,7 @@ document.querySelectorAll('.bc').forEach(function(card){
              +x.rent.toLocaleString()+"/mo, free "+x.avail+"</li>";}).join("")+"</ul>";
   }
 
-  var ASK = ["What's available?","How do I apply?","Pay my rent","Something's broken",
+  var ASK = ["What's available?","How do I apply?","Pay my rent","Submit a work order",
              "Which neighborhoods?","Do you allow pets?","Book a tour"];
 
   // ---- intents: [name, keywords, reply(), chips] ----
@@ -678,11 +678,11 @@ document.querySelectorAll('.bc').forEach(function(card){
       "Already applied? Check where it stands in the "+ext(PORTAL,"resident portal")+"."; },
     ["What's available?","How much is the fee?","Book a tour"]],
 
-   ["rent", ["pay rent","pay my rent","rent payment","autopay","balance","make a payment","pay online","bill"],
+   ["rent", ["pay rent","pay my rent","rent payment","autopay","balance","make a payment","pay online","bill","where do i pay","rent due","late fee","receipt","payment history","ledger"],
     function(){ return "Rent is paid in the "+ext(PORTAL,"resident portal")+" — you can pay once, set up autopay, or check your balance and history there."; },
     ["Something's broken","Check application status"]],
 
-   ["maint", ["broken","repair","fix","maintenance","leak","heat","furnace","radiator","no hot water","clog","pest","emergency","bug","mice","boiler","ac ","air condition"],
+   ["maint", ["work order","workorder","work-order","service request","maintenance request","submit a request","put in a request","file a","report a","ticket","broken","broke","repair","fix","fixed","maintenance","not working","doesn't work","does not work","leak","leaking","heat","furnace","radiator","no hot water","hot water","clog","clogged","drain","toilet","sink","pest","emergency","bug","roach","mice","rodent","boiler","ac ","air condition","window","door","lock","light","outlet","power","something wrong","issue","problem"],
     function(q){
       var urgent = /flood|fire|gas|smoke|no heat|burst|sparking|emergenc|carbon/.test(q);
       return (urgent ? "<strong>If this is an emergency — gas, fire, flooding or no heat — call the office now rather than waiting on a message.</strong><br><br>" : "")+
@@ -710,7 +710,7 @@ document.querySelectorAll('.bc').forEach(function(card){
     function(){ return "Happy to show you around. "+nav("contact","Send us a note")+" with the apartment you are interested in and a couple of times that suit you, and someone will come back to you."; },
     ["What's available?","How do I apply?"]],
 
-   ["contact", ["contact","talk to someone","call","phone","email","reach you","speak to","human","person","office hours"],
+   ["contact", ["contact","talk to someone","call","phone","email","reach you","speak to","human","person","office hours","who do i call","property manager","landlord","management","complaint","speak with"],
     function(){ return "The quickest way is the form on the "+nav("contact","contact page")+" — a person reads those. Office hours are Monday to Friday, 9 to 5."; },
     ["Book a tour","What's available?"]],
 
@@ -742,7 +742,12 @@ document.querySelectorAll('.bc').forEach(function(card){
       it[1].forEach(function(k){ if(q.indexOf(k)>-1) sc += k.length>6?2:1; });
       if(sc>bestScore){ bestScore=sc; best=it; }
     });
-    if(!best) return ["I am not sure I followed that. I am best on available apartments, applying, rent, repairs and the neighborhoods — or "+nav("contact","ask a person")+" anything I cannot cover.", ASK.slice(0,4)];
+    if(!best){
+      if(/ tenant | resident |my apartment|my unit|my building|i live/.test(q))
+        return ["Almost everything on the resident side lives in the "+ext(PORTAL,"resident portal")+" — paying rent, submitting a work order, and checking an application. If it is something else, "+nav("contact","send us a note")+" and a person will pick it up.",
+                ["Pay my rent","Something's broken","Talk to someone"]];
+      return ["I am not sure I followed that. I am best on available apartments, applying, rent, work orders and the neighborhoods — or "+nav("contact","ask a person")+" anything I cannot cover.", ASK.slice(0,4)];
+    }
     return [best[2](q), best[3]];
   }
 
