@@ -32,8 +32,8 @@ h1,h2,h3{margin:0;font-weight:400}
 .util{background:rgba(0,0,0,.42);-webkit-backdrop-filter:blur(10px) saturate(140%);
   backdrop-filter:blur(10px) saturate(140%);position:relative;z-index:51;
   transition:background .3s ease}
-.util .wrap{display:flex;justify-content:flex-end;gap:26px;padding-block:9px}
-.util a{font-family:var(--m);font-size:11px;font-weight:500;letter-spacing:.18em;
+.util .wrap{display:flex;justify-content:flex-end;gap:26px;padding-block:5px}
+.util a{font-family:var(--m);font-size:10px;font-weight:500;letter-spacing:.18em;
   text-transform:uppercase;color:var(--blue);text-decoration:none}
 .util a:hover{color:#fff}
 
@@ -46,10 +46,10 @@ h1,h2,h3{margin:0;font-weight:400}
   transition:background .3s ease,border-color .3s ease}
 .bar.solid{background:var(--deep);border-bottom-color:rgba(65,182,230,.3)}
 .util.solid{background:#000}
-.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:17px}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:9px}
 .word{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
-.word img{height:clamp(26px,3vw,34px);width:auto}
-.word b{font-weight:300;font-size:clamp(21px,2.5vw,29px);letter-spacing:.28em;
+.word img{height:clamp(22px,2.4vw,28px);width:auto}
+.word b{font-weight:300;font-size:clamp(18px,2.1vw,24px);letter-spacing:.26em;
   text-transform:uppercase;line-height:1}
 .bar nav{display:flex;gap:30px}
 .bar nav a{font-size:16px;font-weight:500;color:#fff;text-decoration:none}
@@ -77,19 +77,10 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
   letter-spacing:.17em;text-transform:uppercase;color:#fff;margin:.08em 0 0}
 
 /* full-bleed film at the top of the homepage */
-.film{position:relative;width:100%;overflow:hidden;background:var(--deep);
-  height:clamp(460px,86vh,900px);
+.film{position:relative;width:100%;background:#000;overflow:hidden;
+  height:clamp(380px,78vh,820px);
   margin-top:calc(-1 * var(--stack,96px))}
-/* blurred still fills the sides so a vertical clip is not sitting in black bars */
-.film .film-bg{position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;
-  filter:blur(34px) saturate(130%) brightness(.55);transform:scale(1.06)}
-.film video{position:absolute;inset:0;width:100%;height:100%;
-  object-fit:contain;object-position:center}
-@media(max-width:700px){
-  .film{height:min(92vh,760px)}
-  .film video{object-fit:cover}
-  .film .film-bg{display:none}
-}
+.film video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .film::after{content:"";position:absolute;left:0;right:0;bottom:0;height:38%;
   background:linear-gradient(180deg,rgba(6,34,46,0) 0%,rgba(6,34,46,.55) 100%);pointer-events:none}
 .film-mute{position:absolute;right:20px;bottom:20px;z-index:3;
@@ -259,7 +250,6 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
 <main id="top">
 <div class="page" id="page-home">
   <div class="film">
-    <img class="film-bg" src="media/hero.jpg" alt="" aria-hidden="true">
     <video id="heroFilm" autoplay muted loop playsinline preload="metadata" poster="media/hero.jpg">
       <source src="media/hero.mp4" type="video/mp4">
     </video>
