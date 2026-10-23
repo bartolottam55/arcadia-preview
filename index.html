@@ -132,13 +132,14 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 .hc::after{content:"";display:block;width:36px;height:3px;background:var(--red);margin-top:20px}
 
 /* filter chips */
-.filters{display:flex;flex-wrap:wrap;gap:9px;align-items:center;
+.filters{display:flex;flex-wrap:nowrap;gap:9px;align-items:center;overflow-x:auto;scrollbar-width:none;
   padding-block:16px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
   margin-bottom:clamp(26px,4vw,44px)}
 .filters .lab{font-family:var(--m);font-size:11.5px;font-weight:500;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--red);margin-right:8px}
+  text-transform:uppercase;color:var(--red);margin-right:8px;white-space:nowrap;flex:none}
+.filters::-webkit-scrollbar{display:none}
 .chip{font-family:var(--f);font-size:15px;font-weight:500;background:transparent;
-  border:1px solid var(--line);color:var(--ink2);padding:9px 18px;border-radius:100px;cursor:pointer}
+  border:1px solid var(--line);color:var(--ink2);padding:9px 18px;border-radius:100px;cursor:pointer;white-space:nowrap;flex:none}
 .chip:hover{border-color:var(--gold);background:rgba(227,165,44,.15);color:var(--ink)}
 .chip.on{background:var(--red);border-color:var(--red);color:var(--cream)}
 
@@ -298,11 +299,7 @@ footer{background:linear-gradient(180deg,#6A9DAD 0%,var(--blue) 100%);
   <div class="page" id="page-buildings">
   <section class="panel lite" id="buildings" style="padding-top:0">
     <div class="wrap">
-      <div class="head">
-        
-        <h2>Vintage buildings, kept properly.</h2>
-        <p>Most are a century old. We keep the bay windows, the trim and the terrazzo, and replace everything behind the walls.</p>
-      </div>
+      <p class="scroll-hint">Scroll for more</p>
       <div class="filters"><span class="lab">Filter by neighborhood</span>
           <button class="chip on" data-f="all">All</button>
           <button class="chip" data-f="Avondale">Avondale</button>
@@ -317,7 +314,6 @@ footer{background:linear-gradient(180deg,#6A9DAD 0%,var(--blue) 100%);
           <button class="chip" data-f="Old Irving Park">Old Irving Park</button>
           <button class="chip" data-f="Ukrainian Village">Ukrainian Village</button>
           <button class="chip" data-f="West Town">West Town</button></div>
-      <p class="scroll-hint">Scroll for more</p>
       <div class="grid2" id="bgrid"><article class="bc" data-hood="East Humboldt Park">
           <div class="ph"><video class="bv" muted loop playsinline preload="none" poster="media/talman.jpg"><source src="media/talman.mp4" type="video/mp4"></video></div>
           <p class="addr">1420–1422 N Talman Ave.</p><h3>Talman</h3><p class="bh">East Humboldt Park</p></article>
