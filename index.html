@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
 :root{
-  --blue:#41B6E6; --deep:#06222E; --mid:#1B7FAE; --red:#E4002B;
+  --blue:#A9C8D4; --deep:#06222E; --mid:#8BB6C3; --red:#E4002B;
   --ink:#06222E; --ink2:#2E5B6E; --white:#FFFFFF; --paper:#FFFFFF;
   --line:#D9E8F0; --shadow:rgba(6,34,46,.12);
   --f:"Jost",-apple-system,"Segoe UI",sans-serif;
@@ -37,7 +37,7 @@ h1,h2,h3{margin:0;font-weight:400}
 
 /* nav */
 .bar{position:sticky;top:0;z-index:50;background:var(--deep);
-  border-bottom:1px solid rgba(65,182,230,.3)}
+  border-bottom:1px solid rgba(169,200,212,.3)}
 .util.solid{background:#000}
 .bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:9px}
 .word{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff}
@@ -54,9 +54,9 @@ h1,h2,h3{margin:0;font-weight:400}
 @media(max-width:1000px){.bar nav{display:none}.menub{display:block}}
 
 /* gradient panels */
-.panel{background:linear-gradient(180deg,var(--deep) 0%,var(--mid) 48%,var(--blue) 100%);
+.panel{background:linear-gradient(180deg,#6A9DAD 0%,var(--mid) 48%,var(--blue) 100%);
   color:#04161E;padding-block:clamp(54px,8.5vw,110px)}
-.panel.flip{background:linear-gradient(180deg,var(--blue) 0%,var(--mid) 52%,var(--deep) 100%);color:#EAF6FC}
+.panel.flip{background:linear-gradient(180deg,var(--blue) 0%,var(--mid) 52%,#6A9DAD 100%);color:#EAF6FC}
 .panel.lite{background:var(--paper);color:var(--ink)}
 .eyebrow{font-family:var(--m);font-size:12px;font-weight:500;letter-spacing:.26em;
   text-transform:uppercase;margin:0 0 20px}
@@ -180,7 +180,7 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 .note ul{margin:0;padding-left:18px;color:var(--ink2);font-size:16px}
 
 /* footer */
-footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
+footer{background:linear-gradient(180deg,#6A9DAD 0%,var(--blue) 100%);
   color:#04161E;padding-block:clamp(50px,7vw,92px)}
 .fcols{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap}
 .fnav{display:flex;flex-direction:column;gap:10px;font-weight:600;font-size:17.5px}
@@ -652,9 +652,9 @@ footer{background:linear-gradient(180deg,var(--mid) 0%,var(--blue) 100%);
   box-shadow:0 8px 28px rgba(6,34,46,.28);transition:transform .2s,background .2s}
 .ab-fab:hover{background:var(--blue);color:var(--deep);transform:translateY(-2px)}
 .ab-fab .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);
-  box-shadow:0 0 0 0 rgba(65,182,230,.7);animation:abPulse 2.4s infinite}
+  box-shadow:0 0 0 0 rgba(169,200,212,.7);animation:abPulse 2.4s infinite}
 .ab-fab:hover .dot{background:var(--deep);animation:none}
-@keyframes abPulse{0%{box-shadow:0 0 0 0 rgba(65,182,230,.6)}70%{box-shadow:0 0 0 11px rgba(65,182,230,0)}100%{box-shadow:0 0 0 0 rgba(65,182,230,0)}}
+@keyframes abPulse{0%{box-shadow:0 0 0 0 rgba(169,200,212,.6)}70%{box-shadow:0 0 0 11px rgba(169,200,212,0)}100%{box-shadow:0 0 0 0 rgba(169,200,212,0)}}
 .ab-fab[hidden],.ab-win[hidden]{display:none}
 
 .ab-win{position:fixed;right:22px;bottom:22px;z-index:91;
