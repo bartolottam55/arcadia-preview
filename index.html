@@ -1331,3 +1331,144 @@ footer{background:var(--blue);
 .mf-stamp b{display:block;font-family:var(--f);font-size:23px;letter-spacing:.02em}
 .mf-stamp i{display:block;font-size:9px;opacity:.85;text-transform:none;font-style:italic}
 </style>
+
+<style>
+/* ---------- full-page buildings view ---------- */
+.bp{position:fixed;inset:0;z-index:75;background:var(--paper);overflow-y:auto;
+  opacity:0;pointer-events:none;transition:opacity .25s ease}
+.bp.open{opacity:1;pointer-events:auto}
+.bp-top{position:sticky;top:0;z-index:3;background:var(--deep);
+  border-bottom:3px solid var(--gold)}
+.bp-top .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px;padding-block:14px}
+.bp-top .word{display:flex;align-items:center;gap:11px;color:#fff;text-decoration:none}
+.bp-top .word img{height:26px;width:auto}
+.bp-top .word b{font-weight:300;font-size:21px;letter-spacing:.26em;text-transform:uppercase}
+.bp-x{background:none;border:0;color:#fff;cursor:pointer;font-family:var(--m);
+  font-size:11.5px;letter-spacing:.2em;text-transform:uppercase}
+.bp-x:hover{color:var(--gold)}
+.bp-body{padding-block:clamp(34px,5vw,64px)}
+.bp-head{max-width:60ch;margin-bottom:clamp(26px,3.6vw,44px)}
+.bp-head .eyebrow{color:var(--red)}
+.bp-head h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,50px);
+  line-height:1.14;margin:0 0 14px}
+.bp-head h2::before{content:"\25B2";display:block;color:var(--gold);font-size:13px;
+  margin-bottom:13px;letter-spacing:0}
+.bp-head p{margin:0;font-size:18.5px;color:var(--ink2)}
+.bp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(282px,1fr));
+  gap:clamp(20px,2.6vw,32px)}
+.bp-grid .bc{cursor:pointer}
+.bp-count{font-family:var(--m);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink2);margin:0 0 18px}
+.bp-filters{display:flex;flex-wrap:wrap;gap:9px;align-items:center;
+  margin-top:clamp(30px,4vw,48px);padding-top:22px;border-top:1px solid var(--line)}
+.bp-empty{padding:40px 0;color:var(--ink2);font-size:17px}
+.hc{cursor:pointer;transition:background .2s}
+.hc:hover{background:var(--paper2)}
+.hc h3::after{content:" \2192";color:var(--gold);font-size:.8em}
+</style>
+
+<div class="bp" id="bpView" aria-hidden="true">
+  <div class="bp-top"><div class="wrap">
+    <a class="word" href="#top" data-bp-close="1"><img src="media/logo.png" alt=""><b>Arcadia</b></a>
+    <button class="bp-x" type="button" id="bpClose">&larr; Back to the site</button>
+  </div></div>
+  <div class="wrap bp-body">
+    <div class="bp-head">
+      <p class="eyebrow">Our apartment buildings</p>
+      <h2 id="bpTitle">Every building we own.</h2>
+      <p id="bpSub">Most are a century old. We keep the bay windows, the trim and the terrazzo, and replace everything behind the walls.</p>
+    </div>
+    <p class="bp-count" id="bpCount"></p>
+    <div class="bp-grid" id="bpGrid"></div>
+    <p class="bp-empty" id="bpEmpty" hidden>No buildings in that neighborhood yet.</p>
+    <div class="bp-filters" id="bpFilters"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var view=document.getElementById('bpView'), grid=document.getElementById('bpGrid'),
+      chips=document.getElementById('bpFilters'), count=document.getElementById('bpCount'),
+      empty=document.getElementById('bpEmpty'), title=document.getElementById('bpTitle'),
+      sub=document.getElementById('bpSub');
+  if(!view) return;
+
+  var source = [].slice.call(document.querySelectorAll('#bgrid .bc'));
+  if(!source.length) return;
+  var hoods = [].concat.apply([], source.map(function(c){ return [c.dataset.hood]; }))
+                .filter(function(v,i,a){ return v && a.indexOf(v)===i; }).sort();
+
+  // one clone of every card, rebuilt so hover video still works
+  source.forEach(function(c){
+    var clone = c.cloneNode(true);
+    var v = clone.querySelector('video.bv');
+    if(v){
+      clone.addEventListener('mouseenter', function(){ v.play().catch(function(){}); });
+      clone.addEventListener('mouseleave', function(){ v.pause(); v.load(); });
+    }
+    clone.addEventListener('click', function(e){
+      if(e.target.closest('a')) return;
+      c.click();                       // reuse the existing detail panel
+    });
+    grid.appendChild(clone);
+  });
+
+  var cards = [].slice.call(grid.querySelectorAll('.bc'));
+
+  function chip(label, val, on){
+    var b=document.createElement('button');
+    b.className='chip'+(on?' on':''); b.type='button'; b.dataset.f=val; b.textContent=label;
+    b.onclick=function(){ apply(val); };
+    return b;
+  }
+  chips.appendChild(Object.assign(document.createElement('span'),
+    {className:'lab', textContent:'Filter by neighborhood'}));
+  chips.appendChild(chip('All','all',true));
+  hoods.forEach(function(h){ chips.appendChild(chip(h,h,false)); });
+
+  function apply(f){
+    var n=0;
+    cards.forEach(function(k){
+      var show = (f==='all' || k.dataset.hood===f);
+      k.hidden = !show; if(show) n++;
+    });
+    [].forEach.call(chips.querySelectorAll('.chip'), function(b){
+      b.classList.toggle('on', b.dataset.f===f);
+    });
+    empty.hidden = n>0;
+    count.textContent = n + (n===1?' building':' buildings') + (f==='all'?'' : ' in '+f);
+    title.textContent = (f==='all') ? 'Every building we own.' : f+'.';
+    sub.textContent = (f==='all')
+      ? 'Most are a century old. We keep the bay windows, the trim and the terrazzo, and replace everything behind the walls.'
+      : 'Every Arcadia building in '+f+'. Click one for the full page.';
+    view.scrollTop = 0;
+  }
+
+  function open_(f){
+    apply(f||'all');
+    view.classList.add('open'); view.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+  }
+  function close_(){
+    view.classList.remove('open'); view.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+  }
+
+  // the nav tab opens the page instead of scrolling
+  document.querySelectorAll('a[href="#buildings"]').forEach(function(a){
+    a.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); open_('all'); }, true);
+  });
+  // a neighbourhood card opens it pre-filtered
+  document.querySelectorAll('.hc').forEach(function(c){
+    var h=(c.querySelector('h3')||{}).textContent.trim();
+    c.addEventListener('click', function(){ open_(hoods.indexOf(h)>-1 ? h : 'all'); });
+  });
+
+  document.getElementById('bpClose').addEventListener('click', close_);
+  view.querySelector('[data-bp-close]').addEventListener('click', function(e){ e.preventDefault(); close_(); });
+  document.addEventListener('keydown', function(e){
+    if(e.key==='Escape' && view.classList.contains('open')) close_();
+  });
+  apply('all');
+})();
+</script>
