@@ -57,7 +57,10 @@ h1,h2,h3{margin:0;font-weight:400}
 /* gradient panels */
 .panel{background:linear-gradient(180deg,#6A9DAD 0%,var(--mid) 48%,var(--blue) 100%);
   color:#04161E;padding-block:clamp(54px,8.5vw,110px)}
-.panel.flip{background:linear-gradient(180deg,var(--blue) 0%,var(--mid) 52%,#6A9DAD 100%);color:#EAF6FC}
+.panel.flip{background:var(--red);color:var(--cream)}
+.panel.flip .eyebrow{color:var(--gold)}
+.panel.flip h2,.panel.flip p.body{color:var(--cream)}
+.panel.flip .alink{color:var(--cream)}
 .panel.lite{background:var(--paper);color:var(--ink)}
 .eyebrow{font-family:var(--m);font-size:12px;font-weight:500;letter-spacing:.26em;
   text-transform:uppercase;margin:0 0 20px}
@@ -95,9 +98,9 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 /* arrow link */
 .alink{display:inline-flex;align-items:center;gap:16px;margin-top:34px;
   text-decoration:none;font-weight:600;font-size:clamp(16px,1.5vw,19px)}
-.alink .circ{width:54px;height:54px;border-radius:50%;background:#fff;color:var(--deep);
+.alink .circ{width:54px;height:54px;border-radius:50%;background:var(--gold);color:var(--deep);
   display:grid;place-items:center;font-size:23px;transition:transform .22s,background .2s}
-.alink:hover .circ{transform:translateX(7px);background:var(--red);color:#fff}
+.alink:hover .circ{transform:translateX(7px);background:var(--red);color:var(--cream)}
 
 /* photo bands */
 .band{overflow:hidden;background:var(--deep)}
@@ -117,7 +120,7 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 .hc{background:var(--paper);padding:30px 28px}
 .hc h3{font-family:var(--m);font-size:22px;margin-bottom:12px}
 .hc p{margin:0;color:var(--ink2);font-size:16.5px}
-.hc::after{content:"";display:block;width:36px;height:3px;background:var(--blue);margin-top:20px}
+.hc::after{content:"";display:block;width:36px;height:3px;background:var(--red);margin-top:20px}
 
 /* filter chips */
 .filters{display:flex;flex-wrap:wrap;gap:9px;align-items:center;
@@ -128,7 +131,7 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 .chip{font-family:var(--f);font-size:15px;font-weight:500;background:transparent;
   border:1px solid var(--line);color:var(--ink2);padding:9px 18px;border-radius:100px;cursor:pointer}
 .chip:hover{border-color:var(--blue);color:var(--ink)}
-.chip.on{background:var(--deep);border-color:var(--deep);color:#fff}
+.chip.on{background:var(--red);border-color:var(--red);color:var(--cream)}
 
 /* cards */
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(20px,2.8vw,34px)}
@@ -143,6 +146,7 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 #bgrid::-webkit-scrollbar-thumb{background:var(--line);border-radius:100px}
 #bgrid::-webkit-scrollbar-thumb:hover{background:var(--mid)}
 #bgrid .bc{flex:0 0 clamp(236px,25vw,310px);scroll-snap-align:start}
+.mark{background:linear-gradient(180deg,transparent 58%,var(--gold) 58%,var(--gold) 94%,transparent 94%)}
 .scroll-hint{font-family:var(--m);font-size:11px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--ink2);margin:0 0 12px}
 @media(hover:none){.scroll-hint::after{content:" \2192"}}
@@ -158,7 +162,7 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
   letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
 .addr{font-family:var(--m);font-size:13.5px;color:var(--ink2);margin:16px 0 0}
 .bc h3,.lb h3{font-family:var(--m);font-size:19px;margin:8px 0 0;
-  padding-bottom:12px;border-bottom:2px solid var(--blue)}
+  padding-bottom:12px;border-bottom:2px solid var(--gold)}
 .bh{font-weight:600;font-size:15.5px;color:var(--mid);margin:10px 0 0}
 .lc{background:var(--paper);border:1px solid var(--line);display:flex;flex-direction:column}
 .lb{padding:0 20px 22px;display:flex;flex-direction:column;gap:0}
@@ -177,9 +181,9 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 .q{font-family:var(--m);font-size:clamp(20px,2.9vw,36px);line-height:1.34;
   max-width:26ch;margin:0 auto;color:#04161E}
 .qnav{display:flex;gap:14px;justify-content:center;margin-top:40px}
-.qbtn{width:54px;height:54px;border-radius:50%;border:0;background:#fff;color:var(--deep);
+.qbtn{width:54px;height:54px;border-radius:50%;border:0;background:var(--gold);color:var(--deep);
   font-size:22px;cursor:pointer}
-.qbtn:hover{background:var(--red);color:#fff}
+.qbtn:hover{background:var(--red);color:var(--cream)}
 
 /* doors */
 .dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(224px,1fr));gap:14px}
@@ -206,7 +210,7 @@ footer{background:linear-gradient(180deg,#6A9DAD 0%,var(--blue) 100%);
   font-weight:600;font-size:16.5px;padding:15px 30px;border-radius:100px;margin-top:13px;min-width:268px}
 .wp:hover{background:var(--deep);color:#fff}
 .top{display:inline-flex;align-items:center;gap:14px;text-decoration:none;font-weight:600;font-size:17px}
-.top .circ{width:54px;height:54px;border-radius:50%;background:#fff;color:var(--deep);
+.top .circ{width:54px;height:54px;border-radius:50%;background:var(--gold);color:var(--deep);
   display:grid;place-items:center;font-size:23px}
 .fword{text-align:center;margin-top:clamp(40px,6vw,76px);display:flex;
   align-items:center;justify-content:center;gap:18px}
@@ -271,7 +275,7 @@ footer{background:linear-gradient(180deg,#6A9DAD 0%,var(--blue) 100%);
         <h1 class="hero-word">Arcadia</h1>
       </div>
       <div class="copy">
-        <p>Welcome home to Arcadia. We&rsquo;re a small, family-run company and we live in this city too. We restore old Chicago apartment buildings and then we stay &mdash; so the person who answers when your radiator quits is the person who owns the building.</p>
+        <p>Welcome home to Arcadia. We&rsquo;re a small, family-run company and we live in this city too. We restore old Chicago apartment buildings and then we stay &mdash; <span class="mark">so the person who answers when your radiator quits is the person who owns the building.</span></p>
         <a class="alink" href="#manifesto">Read our manifesto <span class="circ">&rarr;</span></a>
       </div>
     </div>
