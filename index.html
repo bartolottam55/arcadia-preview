@@ -71,7 +71,8 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 
 /* full-bleed film at the top of the homepage */
 .film{position:relative;width:100%;background:#000;overflow:hidden;
-  height:clamp(380px,78vh,820px)}
+  height:clamp(380px,78vh,820px);
+  border-radius:0 0 50% 50% / 0 0 clamp(34px,5vw,80px) clamp(34px,5vw,80px)}
 .film video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .film::after{content:"";position:absolute;left:0;right:0;bottom:0;height:38%;
   background:linear-gradient(180deg,rgba(6,34,46,0) 0%,rgba(6,34,46,.55) 100%);pointer-events:none}
@@ -211,8 +212,9 @@ footer{background:linear-gradient(180deg,#6A9DAD 0%,var(--blue) 100%);
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
   /* ---- page routing ---- */
-  .page{display:none}
-  .page.on{display:block}
+  .page{display:block}
+  html{scroll-behavior:smooth}
+  div[id^="page-"]{scroll-margin-top:calc(var(--stack,92px) + 16px)}
   header.bar nav a.active{color:var(--blue)}
   .ov .links a.active{color:var(--red)}
   header.bar nav a.active{font-weight:700}
@@ -511,29 +513,39 @@ footer{background:linear-gradient(180deg,#6A9DAD 0%,var(--blue) 100%);
 <script>
 (function(){
   /* ---- page routing ---- */
-  var PAGES=['home','search','buildings','about','hoods','residents'];
-  function routeName(){
-    var h=(location.hash||'').replace(/^#\/?/,'');
-    if(!h||h==='top')return 'home';
-    return PAGES.indexOf(h)>-1 ? h : 'home';
+  var PAGES=['home','search','buildings','about','hoods','residents','contact'];
+  function target(n){ return document.getElementById('page-'+n) || document.getElementById(n); }
+  function stack(){
+    return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--stack')) || 92;
   }
-  function route(scroll){
-    var n=routeName();
-    PAGES.forEach(function(p){
-      var el=document.getElementById('page-'+p);
-      if(el) el.classList.toggle('on', p===n);
-    });
+  function mark(n){
     document.querySelectorAll('header.bar nav a, .fnav a, .ov .links a').forEach(function(a){
       var t=(a.getAttribute('href')||'').replace(/^#\/?/,'');
       a.classList.toggle('active', t===n);
     });
-    document.title = (n==='home') ? 'Arcadia Chicago' : 'Arcadia Chicago \u2014 ' + ({
-      search:'Apartment Search', buildings:'Our Buildings', about:'Get to Know Us',
-      hoods:'Neighborhoods', residents:'Residents'}[n]||'');
-    if(scroll!==false) window.scrollTo(0,0);
   }
-  window.addEventListener('hashchange',function(){route(true)});
-  route(false);
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var t=(a.getAttribute('href')||'').replace(/^#\/?/,'');
+      if(!t || t==='top'){ e.preventDefault(); window.scrollTo({top:0,behavior:'smooth'}); mark('home'); return; }
+      var el=target(t); if(!el) return;
+      e.preventDefault();
+      var y = el.getBoundingClientRect().top + window.scrollY - stack() - 12;
+      window.scrollTo({top:Math.max(0,y), behavior:'smooth'});
+      mark(t);
+    });
+  });
+  var spyT;
+  function spy(){
+    var line = window.scrollY + window.innerHeight*0.3, cur='home';
+    PAGES.forEach(function(p){
+      var el=target(p); if(!el) return;
+      if(el.getBoundingClientRect().top + window.scrollY <= line) cur=p;
+    });
+    mark(cur);
+  }
+  window.addEventListener('scroll', function(){ clearTimeout(spyT); spyT=setTimeout(spy,90); }, {passive:true});
+  spy();
 
   var topLink=document.querySelector('footer .top');
   if(topLink) topLink.addEventListener('click',function(e){
