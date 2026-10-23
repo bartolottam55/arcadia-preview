@@ -117,6 +117,13 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 @keyframes pull{from{transform:scale(1.2)}to{transform:scale(1)}}
 
 .head{max-width:60ch;margin-bottom:clamp(28px,4.4vw,52px)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,66px);align-items:center}
+.split .pic{overflow:hidden}
+.split .pic img{width:100%;height:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.split .txt h2{max-width:none}
+.split .txt p.body{margin-top:20px}
+@media(max-width:860px){.split{grid-template-columns:1fr;gap:26px}
+  .split .pic{order:-1}}
 .head h2{margin-bottom:16px}
 .panel.lite .head h2::before{content:"\25B2";display:block;color:var(--gold);
   font-size:13px;margin-bottom:13px;letter-spacing:0}
@@ -381,20 +388,26 @@ footer{background:var(--blue);
 <div class="page" id="page-story">
 
   <section class="panel">
-    <div class="wrap">
-      <p class="eyebrow">Get to know us</p>
-      <h2>Ask us anything, any hour.</h2>
-      <p class="body">Questions get answered right away, day or night, and maintenance requests go straight to our own team. We would rather fix something properly once than send someone back three times.</p>
-      <a class="alink" href="#about">Get to know us <span class="circ">&rarr;</span></a>
+    <div class="wrap split">
+      <div class="txt">
+        <p class="eyebrow">Get to know us</p>
+        <h2>Ask us anything, any hour.</h2>
+        <p class="body">Questions get answered right away, day or night, and maintenance requests go straight to our own team. We would rather fix something properly once than send someone back three times.</p>
+        <a class="alink" href="#residents">Resident services <span class="circ">&rarr;</span></a>
+      </div>
+      <div class="pic"><img src="images/img05.jpg" alt="Inside a restored Arcadia apartment"></div>
     </div>
   </section>
 
   <section class="panel lite">
-    <div class="wrap">
-      <p class="eyebrow">Already live with us</p>
-      <h2>Rent, repairs and applications in one place.</h2>
-      <p class="body">One login for all of it.</p>
-      <a class="alink" href="#residents">Resident services <span class="circ">&rarr;</span></a>
+    <div class="wrap split">
+      <div class="pic"><img src="images/img06.jpg" alt="A restored Arcadia kitchen"></div>
+      <div class="txt">
+        <p class="eyebrow">Already live with us</p>
+        <h2>Rent, repairs and applications in one place.</h2>
+        <p class="body">One login for all of it.</p>
+        <a class="alink" href="#residents">Resident services <span class="circ">&rarr;</span></a>
+      </div>
     </div>
   </section>
 
@@ -462,14 +475,7 @@ footer{background:var(--blue);
 </div>
 
   <div class="page" id="page-about">
-  <section class="panel flip" id="about">
-    <div class="wrap">
-      <p class="eyebrow">Get to know us</p>
-      <h2>Ask us anything, any hour.</h2>
-      <p class="body">Questions get answered right away, day or night, and maintenance requests go straight to our own team. We would rather fix something properly once than send someone back three times.</p>
-      <a class="alink" href="#residents">Resident services <span class="circ">&rarr;</span></a>
-    </div>
-  </section>
+  <section class="panel flip" id="about" style="padding-block:0;min-height:1px"></section>
 
   <section class="panel">
     <div class="wrap quotes">
