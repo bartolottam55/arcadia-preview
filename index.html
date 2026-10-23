@@ -1040,3 +1040,151 @@ footer{background:linear-gradient(180deg,#6A9DAD 0%,var(--blue) 100%);
   });
 })();
 </script>
+
+<style>
+/* ---------- building detail panel ---------- */
+.bd-overlay{position:fixed;inset:0;z-index:80;background:rgba(4,22,30,.55);
+  -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
+  opacity:0;pointer-events:none;transition:opacity .25s ease}
+.bd-overlay.open{opacity:1;pointer-events:auto}
+.bd{position:fixed;top:0;right:0;bottom:0;z-index:81;
+  width:min(760px,100vw);background:var(--paper);overflow-y:auto;
+  transform:translateX(100%);transition:transform .32s cubic-bezier(.22,.7,.3,1);
+  box-shadow:-18px 0 60px rgba(4,22,30,.3)}
+.bd.open{transform:none}
+.bd-close{position:sticky;top:0;z-index:4;display:flex;justify-content:flex-end;
+  padding:14px 18px;background:var(--deep)}
+.bd-close button{background:none;border:0;color:#fff;cursor:pointer;font-size:26px;line-height:1;opacity:.8}
+.bd-close button:hover{opacity:1;color:var(--blue)}
+.bd-media{width:100%;aspect-ratio:16/10;background:#000;overflow:hidden}
+.bd-media video,.bd-media img{width:100%;height:100%;object-fit:cover;display:block}
+.bd-media.none{display:grid;place-items:center;background:var(--line);
+  font-family:var(--m);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.bd-body{padding:clamp(24px,4vw,44px)}
+.bd-addr{font-family:var(--m);font-size:clamp(23px,3.2vw,36px);line-height:1.2;
+  color:var(--ink);margin:0}
+.bd-name{font-family:var(--m);font-size:15px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--mid);margin:10px 0 0}
+.bd-sec{margin-top:clamp(26px,3.4vw,42px)}
+.bd-sec h4{font-family:var(--m);font-size:12px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--mid);margin:0 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.bd-sec p{margin:0;color:var(--ink2);font-size:16.5px}
+.bd-slot{border:1px dashed var(--line);border-radius:8px;padding:18px 20px;
+  color:var(--ink2);font-size:15.5px;background:#F6FAFC}
+.bd-slot b{color:var(--mid);display:block;font-family:var(--m);font-size:11px;
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:7px}
+.bd-units{list-style:none;margin:0;padding:0}
+.bd-units li{display:flex;justify-content:space-between;gap:16px;align-items:baseline;
+  padding:13px 0;border-bottom:1px solid var(--line)}
+.bd-units .u{font-weight:600}
+.bd-units .r{font-family:var(--m);white-space:nowrap}
+.bd-none{display:flex;align-items:center;gap:15px;text-decoration:none;color:var(--mid);
+  font-weight:600;font-size:16.5px}
+.bd-none .circ{width:46px;height:46px;border-radius:50%;border:1.5px solid currentColor;
+  display:grid;place-items:center;font-size:20px;flex:none;transition:transform .2s}
+.bd-none:hover .circ{transform:translateX(5px);background:var(--red);border-color:var(--red);color:#fff}
+.bc{cursor:pointer}
+@media(max-width:700px){.bd{width:100vw}}
+</style>
+
+<div class="bd-overlay" id="bdOverlay"></div>
+<aside class="bd" id="bdPanel" aria-hidden="true" aria-label="Building details">
+  <div class="bd-close"><button type="button" id="bdClose" aria-label="Close">&times;</button></div>
+  <div id="bdInner"></div>
+</aside>
+
+<script>
+(function(){
+  var panel=document.getElementById('bdPanel'), ov=document.getElementById('bdOverlay'),
+      inner=document.getElementById('bdInner');
+  if(!panel) return;
+
+  // neighbourhood copy already on the page — reuse it rather than writing it twice
+  var HOOD={};
+  document.querySelectorAll('.hc').forEach(function(c){
+    var h=c.querySelector('h3'), p=c.querySelector('p');
+    if(h&&p) HOOD[h.textContent.trim()]=p.textContent.trim();
+  });
+
+  // open units already on the page
+  function unitsFor(name){
+    var out=[];
+    document.querySelectorAll('.lc').forEach(function(l){
+      var t=(l.querySelector('h3')||{}).textContent||'';
+      if(t.toLowerCase().indexOf(name.toLowerCase().split(' /')[0].toLowerCase())!==0) return;
+      out.push({
+        unit:t,
+        rent:((l.querySelector('.rent')||{}).textContent||'').trim(),
+        avail:((l.querySelector('.avail')||{}).textContent||'').trim()
+      });
+    });
+    return out;
+  }
+
+  function esc(x){ return (x||'').replace(/</g,'&lt;'); }
+
+  function open_(card){
+    var name=(card.querySelector('h3')||{}).textContent.trim();
+    var addr=(card.querySelector('.addr')||{}).textContent.trim();
+    var hood=(card.querySelector('.bh')||{}).textContent.trim();
+    var media=card.querySelector('.ph');
+
+    var mediaHtml='<div class="bd-media none">Photography to come</div>';
+    if(media){
+      var v=media.querySelector('video'), img=media.querySelector('img');
+      if(v) mediaHtml='<div class="bd-media"><video autoplay muted loop playsinline poster="'+
+        v.getAttribute('poster')+'"><source src="'+v.querySelector('source').getAttribute('src')+
+        '" type="video/mp4"></video></div>';
+      else if(img) mediaHtml='<div class="bd-media"><img src="'+img.getAttribute('src')+'" alt="'+esc(name)+'"></div>';
+    }
+
+    var u=unitsFor(name), avail;
+    if(u.length){
+      avail='<ul class="bd-units">'+u.map(function(x){
+        return '<li><span class="u">'+esc(x.unit)+'<br><small style="color:var(--ink2);font-weight:400">'+
+               esc(x.avail)+'</small></span><span class="r">'+esc(x.rent)+'</span></li>';}).join('')+'</ul>';
+    } else {
+      avail='<a class="bd-none" href="#search">Nothing open here right now &mdash; see every available apartment <span class="circ">&rarr;</span></a>';
+    }
+
+    inner.innerHTML =
+      mediaHtml+
+      '<div class="bd-body">'+
+        '<h3 class="bd-addr">'+esc(addr && addr!==' ' ? addr : name)+'</h3>'+
+        '<p class="bd-name">'+esc(name)+' &middot; '+esc(hood)+'</p>'+
+
+        '<div class="bd-sec"><h4>About this building</h4>'+
+          '<div class="bd-slot"><b>Needs a description</b>A couple of sentences from John about what this building is like &mdash; what was kept, what was replaced, what the block is like.</div></div>'+
+
+        '<div class="bd-sec"><h4>Available now</h4>'+avail+'</div>'+
+
+        '<div class="bd-sec"><h4>Building details</h4>'+
+          '<div class="bd-slot"><b>Needs the facts</b>Unit mix, what is included in rent, laundry, parking, pets, outdoor space, nearest train. Once John sends these for each building they drop straight in here.</div></div>'+
+
+        (HOOD[hood] ? '<div class="bd-sec"><h4>Get to know '+esc(hood)+'</h4><p>'+esc(HOOD[hood])+'</p></div>' : '')+
+      '</div>';
+
+    panel.classList.add('open'); ov.classList.add('open');
+    panel.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+    panel.scrollTop=0;
+  }
+  function close_(){
+    panel.classList.remove('open'); ov.classList.remove('open');
+    panel.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+    setTimeout(function(){ inner.innerHTML=''; },320);
+  }
+
+  document.querySelectorAll('.bc').forEach(function(card){
+    card.addEventListener('click', function(e){
+      if(e.target.closest('a')) return;
+      open_(card);
+    });
+  });
+  ov.addEventListener('click', close_);
+  document.getElementById('bdClose').addEventListener('click', close_);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && panel.classList.contains('open')) close_(); });
+  inner.addEventListener('click', function(e){ if(e.target.closest('a[href="#search"]')) close_(); });
+})();
+</script>
