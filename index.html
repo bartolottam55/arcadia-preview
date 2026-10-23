@@ -72,7 +72,8 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 .hero-word{font-weight:300;font-size:clamp(40px,6.4vw,88px);line-height:.95;
   letter-spacing:.17em;text-transform:uppercase;color:#fff;margin:.08em 0 0}
 
-/* full-bleed film at the top of the homepage */
+/* full-bleed film at the top of the homepage; the corners its curve leaves are gold */
+.film-wrap{background:var(--gold)}
 .film{position:relative;width:100%;background:#000;overflow:hidden;
   height:clamp(380px,78vh,820px);
   border-radius:0 0 50% 50% / 0 0 clamp(34px,5vw,80px) clamp(34px,5vw,80px)}
@@ -264,12 +265,12 @@ footer{background:linear-gradient(180deg,#6A9DAD 0%,var(--blue) 100%);
 
 <main id="top">
 <div class="page" id="page-home">
-  <div class="film">
+  <div class="film-wrap"><div class="film">
     <video id="heroFilm" autoplay muted loop playsinline preload="metadata" poster="media/hero.jpg">
       <source src="media/hero.mp4" type="video/mp4">
     </video>
     <button class="film-mute" id="filmMute" type="button" aria-label="Unmute">Sound on</button>
-  </div>
+  </div></div>
 
   <section class="panel intro">
     <div class="wrap intro-grid">
@@ -277,7 +278,7 @@ footer{background:linear-gradient(180deg,#6A9DAD 0%,var(--blue) 100%);
         <h1 class="hero-word">Arcadia</h1>
       </div>
       <div class="copy">
-        <p>Welcome home to Arcadia. We&rsquo;re a small, family-run company and we live in this city too. We restore old Chicago apartment buildings and then we stay &mdash; <span class="mark">so the person who answers when your radiator quits is the person who owns the building.</span></p>
+        <p>Welcome home to Arcadia. We&rsquo;re a small, family-run company and we live in this city too. We restore old Chicago apartment buildings and then we stay &mdash; so the person who answers when your radiator quits is the person who owns the building.</p>
         <a class="alink" href="#manifesto">Read our manifesto <span class="circ">&rarr;</span></a>
       </div>
     </div>
