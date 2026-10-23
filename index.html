@@ -8,17 +8,18 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
 :root{
-  --blue:#A9C8D4; --deep:#06222E; --mid:#8BB6C3; --red:#E4002B;
-  --ink:#06222E; --ink2:#2E5B6E; --white:#FFFFFF; --paper:#FFFFFF;
-  --line:#D9E8F0; --shadow:rgba(6,34,46,.12);
+  --blue:#A9C8D4; --deep:#23313A; --mid:#4E6B78; --red:#BE4B30;
+  --gold:#E3A52C; --cream:#F3E7CE;
+  --ink:#23313A; --ink2:#5B6B74; --white:#FFFFFF; --paper:#F6EFE0;
+  --paper2:#FBF7EC; --line:#DFD2B8; --shadow:rgba(35,49,58,.13);
   --f:"Jost",-apple-system,"Segoe UI",sans-serif;
   --m:"IBM Plex Mono",ui-monospace,monospace;
   --gut:clamp(20px,5vw,62px);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --paper:#0B1316; --ink:#EAF4F8; --ink2:#93AEBB; --line:#1C2B33; --shadow:rgba(0,0,0,.55);}}
+  --paper:#191511; --paper2:#211C16; --ink:#F3E7CE; --ink2:#A89B84; --line:#332C23; --mid:#9FC0CC; --shadow:rgba(0,0,0,.55);}}
 :root[data-theme="dark"]{
-  --paper:#0B1316; --ink:#EAF4F8; --ink2:#93AEBB; --line:#1C2B33; --shadow:rgba(0,0,0,.55);}
+  --paper:#191511; --paper2:#211C16; --ink:#F3E7CE; --ink2:#A89B84; --line:#332C23; --mid:#9FC0CC; --shadow:rgba(0,0,0,.55);}
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f);
   font-size:17.5px;line-height:1.62;-webkit-font-smoothing:antialiased}
@@ -29,7 +30,7 @@ a{color:inherit}
 h1,h2,h3{margin:0;font-weight:400}
 
 /* utility strip */
-.util{background:#000;position:relative;z-index:51}
+.util{background:var(--deep);position:relative;z-index:51}
 .util .wrap{display:flex;justify-content:flex-end;gap:26px;padding-block:5px}
 .util a{font-family:var(--m);font-size:10px;font-weight:500;letter-spacing:.18em;
   text-transform:uppercase;color:var(--blue);text-decoration:none}
@@ -99,7 +100,7 @@ h2{font-family:var(--m);font-weight:400;font-size:clamp(27px,4.3vw,52px);
 .alink:hover .circ{transform:translateX(7px);background:var(--red);color:#fff}
 
 /* photo bands */
-.band{overflow:hidden;background:#000}
+.band{overflow:hidden;background:var(--deep)}
 .band img{width:100%;height:clamp(290px,54vh,620px);object-fit:cover}
 .band.hero img{height:clamp(340px,66vh,720px);transform-origin:52% 44%;
   animation:pull 22s cubic-bezier(.17,.72,.26,1) both}
@@ -214,7 +215,7 @@ footer{background:linear-gradient(180deg,#6A9DAD 0%,var(--blue) 100%);
   text-transform:uppercase;color:#fff}
 .eho{max-width:66ch;margin:28px auto 0;text-align:center;font-size:14px;color:#063A4E}
 
-.draft{background:#000;color:#EAF4F8;font-family:var(--m);font-size:10.5px;
+.draft{background:var(--deep);color:#EAF4F8;font-family:var(--m);font-size:10.5px;
   letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:9px 16px}
 .draft b{color:var(--blue)}
 .ov{position:fixed;inset:0;z-index:70;background:var(--blue);overflow-y:auto}
